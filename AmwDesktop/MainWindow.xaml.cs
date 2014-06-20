@@ -22,6 +22,7 @@ namespace AmwDesktop
         public MainWindow()
         {
             InitializeComponent();
+            MinimizeToTray.Enable(this);
         }
     }
 }
