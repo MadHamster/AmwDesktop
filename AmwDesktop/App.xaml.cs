@@ -1,16 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
+using AirMedia.Core.Log;
+using AirMedia.Core.Requests.Controller;
+using System.Windows.Navigation;
 
 namespace AmwDesktop
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
+        public static RequestManager RequestManager { get; private set; }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            AmwLog.Init(new AmwLogImpl());
+
+            RequestManager = new ThreadPoolRequestManager();
+            RequestManager.Init(RequestManager);
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AmwDesktop</RootNamespace>
     <AssemblyName>AmwDesktop</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -25,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -34,6 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
@@ -41,6 +44,13 @@
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="policy.2.0.taglib-sharp">
+      <HintPath>..\packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -65,6 +75,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="taglib-sharp">
+      <HintPath>..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -74,6 +87,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controller\Requests\Impl\FindMediaFilesInDirectoryRequest.cs" />
+    <Compile Include="Utils\Future.cs" />
+    <Compile Include="Utils\ZipUtils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -82,8 +98,49 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Consts.cs" />
+    <Compile Include="Controller\Requests\Abs\AbsCachedRequest.cs" />
+    <Compile Include="Controller\Requests\Abs\AbsRequest.cs" />
+    <Compile Include="Controller\Requests\Abs\AbstractWebRequest.cs" />
+    <Compile Include="Controller\Requests\Abs\BaseLoadCachedRequest.cs" />
+    <Compile Include="Controller\Requests\Abs\BaseLoadRequest.cs" />
+    <Compile Include="Controller\Requests\Controller\ExecutionFinishedEventArgs.cs" />
+    <Compile Include="Controller\Requests\Controller\IWorker.cs" />
+    <Compile Include="Controller\Requests\Controller\MemoryRequestResultCache.cs" />
+    <Compile Include="Controller\Requests\Controller\RequestManager.cs" />
+    <Compile Include="Controller\Requests\Controller\RequestScheduler.cs" />
+    <Compile Include="Controller\Requests\Controller\SingleThreadWorker.cs" />
+    <Compile Include="Controller\Requests\Controller\ThreadPoolRequestManager.cs" />
+    <Compile Include="Controller\Requests\Controller\ThreadPoolWorker.cs" />
+    <Compile Include="Controller\Requests\Factory\BatchRequestFactory.cs" />
+    <Compile Include="Controller\Requests\Factory\IRequestFactory.cs" />
+    <Compile Include="Controller\Requests\Factory\RequestFactory.cs" />
+    <Compile Include="Controller\Requests\Factory\RequestSubmittedEventArgs.cs" />
+    <Compile Include="Controller\Requests\Impl\BatchRequest.cs" />
+    <Compile Include="Controller\Requests\Impl\SimpleLoadRequest.cs" />
+    <Compile Include="Controller\Requests\Impl\SimpleRequest.cs" />
+    <Compile Include="Controller\Requests\Interfaces\ICachedRequestResult.cs" />
+    <Compile Include="Controller\Requests\Interfaces\IRequestListener.cs" />
+    <Compile Include="Controller\Requests\Interfaces\IRequestManager.cs" />
+    <Compile Include="Controller\Requests\Interfaces\IRequestResultCache.cs" />
+    <Compile Include="Controller\Requests\Model\BatchRequestResult.cs" />
+    <Compile Include="Controller\Requests\Model\CachedLoadRequestResult.cs" />
+    <Compile Include="Controller\Requests\Model\CachedUpdateData.cs" />
+    <Compile Include="Controller\Requests\Model\IntermediateResultUpdateData.cs" />
+    <Compile Include="Controller\Requests\Model\LoadRequestResult.cs" />
+    <Compile Include="Controller\Requests\Model\RequestResult.cs" />
+    <Compile Include="Controller\Requests\Model\RequestResultCacheEntry.cs" />
+    <Compile Include="Controller\Requests\Model\RequestStatus.cs" />
+    <Compile Include="Controller\Requests\Model\ResultEventArgs.cs" />
+    <Compile Include="Controller\Requests\Model\UpdateData.cs" />
+    <Compile Include="Controller\Requests\Model\UpdateEventArgs.cs" />
     <Compile Include="Data\AmwDBContext.cs" />
+    <Compile Include="Data\Models\MediaFile.cs" />
     <Compile Include="Data\Models\SyncableDirectory.cs" />
+    <Compile Include="Log\AmwLog.cs" />
+    <Compile Include="Log\AmwLogImpl.cs" />
+    <Compile Include="Log\LogLevel.cs" />
+    <Compile Include="UI\ViewModel\SyncableDirectoryListItem.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
